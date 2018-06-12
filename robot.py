@@ -106,6 +106,7 @@ def check_order_state(this_order_id):
 
 # 买操作
 def buy_action(this_symbol, this_price, this_amount):
+
     eth_money=get_balance_action(base_action)
     sum=getCountbyBase(eth_money,this_price)
 
@@ -117,10 +118,15 @@ def buy_action(this_symbol, this_price, this_amount):
             print(e)
             time.sleep(1)
 
-    print(buy_result)
-    buy_order_id = buy_result['data']
-    if buy_order_id:
-        print('买单', this_price, '价格成功委托', '订单ID', buy_order_id)
+    try:
+        print(buy_result)
+        buy_order_id = buy_result['data']
+        if buy_order_id:
+            print('买单', this_price, '价格成功委托', '订单ID', buy_order_id)
+    except Exception as e:
+        print(e)
+
+
 
     # 输出订单信息
     # print(fcoin.get_order(buy_order_id))
@@ -153,9 +159,10 @@ def sell_action(this_symbol, this_price, this_amount):
 
 # 撤销订单
 def cancel_order_action(this_order_id):
-    print('sleep 10 S ')
-    time.sleep(10)
+
+    #异步的 调用后睡2S后行动
     cancel_info = fcoin.cancel_order(this_order_id)
+    time.sleep(5)
     # if cancel_info['status'] == 0:
     #     print('成功撤销订单', this_order_id)
 
@@ -163,7 +170,9 @@ def cancel_order_action(this_order_id):
 # 获取行情
 def get_ticker(this_symbol):
     ticker = fcoin.get_market_ticker(symbol)
-    now_price = ticker['data']['ticker'][0]
+    # now_price = ticker['data']['ticker'][0]
+    now_price=ticker['data']['ticker'][4]
+
     print('最新成交价', now_price)
 
     return now_price
@@ -203,6 +212,7 @@ def robot():
     # get_balance_action('eth')
     # get_balance_action('usdt')
     # 获取委托订单列表
+
     get_order_list_first(symbol, submitted)
 
 
@@ -210,7 +220,7 @@ def robot():
 def timer():
     while True:
         robot()
-        time.sleep(3)
+        time.sleep(4)
 
 
 # 守护进程

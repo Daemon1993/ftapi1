@@ -57,14 +57,14 @@ class Fcoin():
         signature = self.get_signed(bytes(sig_str, 'utf-8'))
 
         headers = {
+
             'FC-ACCESS-KEY': self.key,
             'FC-ACCESS-SIGNATURE': signature,
             'FC-ACCESS-TIMESTAMP': timestamp
-
         }
 
         try:
-            r = requests.request(method, full_url, headers=headers, json=payload, timeout=5)
+            r = requests.request(method, full_url, headers=headers, json=payload, timeout=8)
             # r.raise_for_status()
         except requests.exceptions.HTTPError as err:
             print(err)
