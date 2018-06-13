@@ -73,7 +73,7 @@ def get_order_list_first(this_symbol, this_states):
                         old_price=now_price
                         size=old_price-now_price
                         print('size {0}'.format(size))
-                        if size>5:
+                        if size>2:
                             print('size 太大 不卖 buyprice{0} sellprice{1}'.format(old_price,now_price))
                         else:
                             now_price=result['data']['ticker'][2]
@@ -160,9 +160,10 @@ def sell_action(this_symbol, this_price, this_amount):
 # 撤销订单
 def cancel_order_action(this_order_id):
 
+    time.sleep(3)
     #异步的 调用后睡2S后行动
     cancel_info = fcoin.cancel_order(this_order_id)
-    time.sleep(4)
+
     # if cancel_info['status'] == 0:
     #     print('成功撤销订单', this_order_id)
 
@@ -212,15 +213,17 @@ def robot():
     # get_balance_action('eth')
     # get_balance_action('usdt')
     # 获取委托订单列表
-
-    get_order_list_first(symbol, submitted)
+    try:
+        get_order_list_first(symbol, submitted)
+    except Exception as e:
+        print(e)
 
 
 # 定时器
 def timer():
     while True:
         robot()
-        time.sleep(3)
+        time.sleep(2)
 
 
 # 守护进程
