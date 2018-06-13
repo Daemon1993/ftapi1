@@ -15,7 +15,7 @@ fcoin = Fcoin()
 # 查询账户余额
 def get_balance_action(this_symbol):
     balance_info = fcoin.get_balance()
-    print(json.dumps(balance_info))
+    # print(json.dumps(balance_info))
     if this_symbol == 'btc':
         balance = balance_info['data'][2]
         label = 'BTC'
@@ -73,7 +73,7 @@ def get_order_list_first(this_symbol, this_states):
                         old_price=now_price
                         size=old_price-now_price
                         print('size {0}'.format(size))
-                        if size>10:
+                        if size>5:
                             print('size 太大 不卖 buyprice{0} sellprice{1}'.format(old_price,now_price))
                         else:
                             now_price=result['data']['ticker'][2]
@@ -162,7 +162,7 @@ def cancel_order_action(this_order_id):
 
     #异步的 调用后睡2S后行动
     cancel_info = fcoin.cancel_order(this_order_id)
-    time.sleep(5)
+    time.sleep(4)
     # if cancel_info['status'] == 0:
     #     print('成功撤销订单', this_order_id)
 
@@ -170,8 +170,8 @@ def cancel_order_action(this_order_id):
 # 获取行情
 def get_ticker(this_symbol):
     ticker = fcoin.get_market_ticker(symbol)
-    # now_price = ticker['data']['ticker'][0]
-    now_price=ticker['data']['ticker'][4]
+    now_price = ticker['data']['ticker'][0]
+    # now_price=ticker['data']['ticker'][4]
 
     print('最新成交价', now_price)
 
@@ -220,7 +220,7 @@ def robot():
 def timer():
     while True:
         robot()
-        time.sleep(4)
+        time.sleep(3)
 
 
 # 守护进程
