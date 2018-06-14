@@ -70,16 +70,16 @@ def get_order_list_first(this_symbol, this_states):
                         sell_action(symbol, now_price, amount)
                     else:
                         result=fcoin.get_market_ticker(symbol)
-                        old_price=now_price
-                        size=old_price-now_price
+                        now_price=result['data']['ticker'][2]
+                        #拿到买一价格 获取最新成交价格的差价 前面订单价格-buy1价格 <=2
+                        size=order_price-now_price
                         print('size {0}'.format(size))
                         if size>2:
-                            print('size 太大 不卖 buyprice{0} sellprice{1}'.format(old_price,now_price))
+                            print('size 太大 不卖 buy price{0} sellprice{1}'.format(order_price,now_price))
                         else:
-                            now_price=result['data']['ticker'][2]
-                            print('现价小于上一笔买入价，不操作 取最近买单卖出 价格{0}'.format(now_price))
+                            print('现价小于上一笔买入价{0} 2美元以内， 取最近买单卖出价格{1}'.format(order_price,now_price))
                             sell_action(symbol, now_price, amount)
-
+                        # print('价格小于买入  不卖')
                 elif order_item['side'] == 'sell':
                     # 这里只判断卖出价格高于买入价格
                     print('尝试买入')
