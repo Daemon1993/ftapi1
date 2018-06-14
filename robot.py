@@ -74,7 +74,7 @@ def get_order_list_first(this_symbol, this_states):
                         #拿到买一价格 获取最新成交价格的差价 前面订单价格-buy1价格 <=2
                         size=order_price-now_price
                         print('size {0}'.format(size))
-                        if size>2:
+                        if size>10:
                             print('size 太大 不卖 buy price{0} sellprice{1}'.format(order_price,now_price))
                         else:
                             print('现价小于上一笔买入价{0} 2美元以内， 取最近买单卖出价格{1}'.format(order_price,now_price))
@@ -83,11 +83,21 @@ def get_order_list_first(this_symbol, this_states):
                 elif order_item['side'] == 'sell':
                     # 这里只判断卖出价格高于买入价格
                     print('尝试买入')
-                    if now_price <= order_price or True:
-                        print('现价小于等于上一笔卖出价，尝试买入')
-                        buy_action(symbol, now_price, amount)
+
+                    result=fcoin.get_market_ticker(symbol)
+                    buy1=result['data']['ticker'][2]
+                    sell1=result['data']['ticker'][4]
+                    #当买的价格和卖的价格相差10刀 就不买了
+                    size1=sell1-buy1
+                    print('买一 {0} 卖一 {1}'.format(buy1,sell1))
+                    if size1>20:
+                        print('买卖相差 {0} 放弃'.format(size1))
                     else:
-                        print('现价大于上一笔卖出价，不操作')
+                        if now_price <= order_price or True:
+                            print('现价小于等于上一笔卖出价，尝试买入')
+                            buy_action(symbol, now_price, amount)
+                        else:
+                            print('现价大于上一笔卖出价，不操作')
     else:
         if this_states == submitted:
             print('没有发现未成交订单')
