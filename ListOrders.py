@@ -19,7 +19,7 @@ api_secret = api_secret
 fcoin.auth(api_key, api_secret)
 
 
-order_list = fcoin.list_orders(symbol=symbol, states=filled)
+order_list = fcoin.list_orders(symbol=symbol, states=filled,limit=100)
 print(json.dumps(order_list))
 sum=0
 for order in order_list['data']:
