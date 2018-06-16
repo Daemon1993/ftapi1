@@ -23,6 +23,6 @@ order_list = fcoin.list_orders(symbol=symbol, states=filled,limit=100)
 print(json.dumps(order_list))
 sum=0
 for order in order_list['data']:
-    print('订单ID', order['id'], '挂单价格', order['price'], '挂单数量', order['amount'], '方向', order['side'],order['state'])
+    print(order['side'], order['price'], order['state'])
     sum+=float(order['executed_value'])
 print(sum)
